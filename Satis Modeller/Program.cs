@@ -68,47 +68,47 @@ using Satis_Modeller;
 var copperOreRecipe = new Recipe(
     new ItemNode { Resource = Resource.CopperOre, Amount = 60 });
 
-var copperOreMiner = new MachineNode(copperOreRecipe);
+var copperOreMiner = new MachineNode(copperOreRecipe, MachineType.Miner);
 
 var copperIngotsRecipe = new Recipe(
     new ItemNode { Resource = Resource.CopperOre, Amount = 30 },
     new ItemNode { Resource = Resource.CopperIngot, Amount = 30 });
 
-var copperSmelter = new MachineNode(copperIngotsRecipe);
+var copperSmelter = new MachineNode(copperIngotsRecipe, MachineType.Smelter);
 
 var wireRecipe = new Recipe(
     new ItemNode { Resource = Resource.CopperIngot, Amount = 15 },
     new ItemNode { Resource = Resource.Wire, Amount = 30 });
 
-var wireConstructor = new MachineNode(wireRecipe);
+var wireConstructor = new MachineNode(wireRecipe, MachineType.Constructor);
 
 var cableRecipe = new Recipe(
     new ItemNode { Resource = Resource.Wire, Amount = 60 },
     new ItemNode { Resource = Resource.Cable, Amount = 30 });
 
-var cableConstructor = new MachineNode(cableRecipe);
+var cableConstructor = new MachineNode(cableRecipe, MachineType.Constructor);
 
 var copperSheetRecipe = new Recipe(
     new ItemNode { Resource = Resource.CopperIngot, Amount = 20 },
     new ItemNode { Resource = Resource.CopperSheet, Amount = 10 });
 
-var copperSheetConstructor = new MachineNode(copperSheetRecipe);
+var copperSheetConstructor = new MachineNode(copperSheetRecipe, MachineType.Constructor);
 
 // ------
 
 var oilExtractorRecipe = new Recipe(
     new ItemNode { Resource = Resource.CrudeOil, Amount = 60 });
 
-var oilExtractor = new MachineNode(oilExtractorRecipe);
+var oilExtractor = new MachineNode(oilExtractorRecipe, MachineType.Extractor);
 
 var plasticRecipe = new Recipe(
     new ItemNode { Resource = Resource.CrudeOil, Amount = 30 },
     new ItemNode { Resource = Resource.Plastic, Amount = 20 },
     new ItemNode { Resource = Resource.HeavyOilResidue, Amount = 10 });
 
-var plasticRefinery = new MachineNode(plasticRecipe);
+var plasticRefinery = new MachineNode(plasticRecipe, MachineType.Refinery);
 
-var heavyoilResidueStorage = StorageBoxFactory.CreateStorage(Resource.HeavyOilResidue);
+// var heavyoilResidueStorage = StorageBoxFactory.CreateStorage(Resource.HeavyOilResidue);
 
 // 15 sheet, 30 plastic -> 7.5  boards
 var circuitBoardRecipe = new Recipe(
@@ -118,7 +118,7 @@ var circuitBoardRecipe = new Recipe(
     ],
     new ItemNode { Resource = Resource.CircuitBoard, Amount = 7.5 });
 
-var circuitBoardAssembler = new MachineNode(circuitBoardRecipe);
+var circuitBoardAssembler = new MachineNode(circuitBoardRecipe, MachineType.Assembler);
 
 var computerRecipe = new Recipe(
     [
@@ -129,7 +129,7 @@ var computerRecipe = new Recipe(
     new ItemNode { Resource = Resource.Computer, Amount = 2.5 }
 );
 
-var computerManufacturer = new MachineNode(computerRecipe);
+var computerManufacturer = new MachineNode(computerRecipe, MachineType.Manufacturer);
 
 computerManufacturer.AddInput(circuitBoardAssembler);
 computerManufacturer.AddInput(cableConstructor);
@@ -144,7 +144,8 @@ copperSheetConstructor.AddInput(copperSmelter);
 copperSmelter.AddInput(copperOreMiner);
 
 plasticRefinery.AddInput(oilExtractor);
-heavyoilResidueStorage.AddInput(plasticRefinery);
+// heavyoilResidueStorage.AddInput(plasticRefinery);
+// plasticRefinery.AddOutput(heavyoilResidueStorage);
 
 computerManufacturer.SetOutputRate(4);
 
@@ -176,6 +177,7 @@ Console.WriteLine(
 
 Console.WriteLine(RecipiePrinter.Print(computerManufacturer.Recipe, 1));
 Console.WriteLine(RecipiePrinter.Print(computerManufacturer));
+Console.WriteLine(RecipiePrinter.Print(plasticRefinery));
 
 var allNodes = new List<MachineNode>
 {
@@ -188,7 +190,7 @@ var allNodes = new List<MachineNode>
     copperSheetConstructor,
     oilExtractor,
     copperOreMiner,
-    heavyoilResidueStorage,
+    // heavyoilResidueStorage,
 };
 
 ProductionGraphExporter.ExportToPng("production_graph", allNodes);
@@ -197,9 +199,9 @@ public static class StorageBoxFactory
 {
     public static MachineNode CreateStorage(Resource resource)
     {
-        var input = new ItemNode { Resource = resource, Amount = int.MaxValue };
+        var input = new ItemNode { Resource = resource, Amount = 10 };
         var dummyRecipe = new Recipe(input, ItemNode.GetEmpty());
-        return new MachineNode(dummyRecipe)
+        return new MachineNode(dummyRecipe, MachineType.Box)
         {
         };
     }

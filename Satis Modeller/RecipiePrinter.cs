@@ -20,7 +20,9 @@ public class RecipiePrinter
         var longestOutputAmountName = (recipe.Output.Amount * multiplier).ToString(CultureInfo.InvariantCulture).Length;
 
         var remainingInputs = recipe.Inputs.Where(i => i.Resource != Resource.Empty).ToList();
-        var remainingOutputs = new List<ItemNode> { recipe.Output, recipe.Byproduct }.Where(i  => i.Resource != Resource.Empty).ToList();
+        var remainingOutputs = new List<ItemNode> { recipe.Output }.Where(i  => i.Resource != Resource.Empty).ToList();
+        if (recipe.Byproduct is not null)
+            remainingOutputs.Add(recipe.Byproduct);
 
         const int amountPadding = 4;
         var inputResourcePadding = longestInputResourceName;

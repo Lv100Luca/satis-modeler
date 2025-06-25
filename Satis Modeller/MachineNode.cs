@@ -3,8 +3,9 @@ using System.Text;
 
 namespace Satis_Modeller;
 
-public class MachineNode(Recipe recipe)
+public class MachineNode(Recipe recipe, MachineType type)
 {
+    public MachineType Type { get; } = type;
     public Recipe Recipe { get; } = recipe;
 
     public double MachineCount { get; private set; }
@@ -63,6 +64,9 @@ public class MachineNode(Recipe recipe)
 
     public double GetTotalOutputAmount(Resource resource)
     {
+        if (Recipe.Byproduct is not null && Recipe.Byproduct.Resource == resource)
+            return Recipe.Byproduct.Amount * MachineCount;
+
         return Recipe.Output.Amount * MachineCount;
     }
 

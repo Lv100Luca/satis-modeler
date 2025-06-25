@@ -3,15 +3,11 @@ using System.Text;
 
 namespace Satis_Modeller;
 
-public class Recipe(IEnumerable<ItemNode> inputs, ItemNode output, ItemNode byproduct)
+public class Recipe(IEnumerable<ItemNode> inputs, ItemNode output, ItemNode? byproduct = null)
 {
     public IEnumerable<ItemNode> Inputs { get; } = inputs;
     public ItemNode Output { get; } = output;
-    public ItemNode Byproduct { get; } = byproduct;
-
-    public Recipe(IEnumerable<ItemNode> inputs, ItemNode output) : this(inputs, output, ItemNode.GetEmpty())
-    {
-    }
+    public ItemNode? Byproduct { get; } = byproduct;
 
     public Recipe(ItemNode output) : this([ItemNode.GetEmpty()], output)
     {
@@ -21,7 +17,7 @@ public class Recipe(IEnumerable<ItemNode> inputs, ItemNode output, ItemNode bypr
     {
     }
 
-    public Recipe(ItemNode input, ItemNode output, ItemNode byproduct) : this([input], output, byproduct)
+    public Recipe(ItemNode input, ItemNode output, ItemNode? byproduct) : this([input], output, byproduct)
     {
     }
 }

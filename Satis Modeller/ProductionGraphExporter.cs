@@ -15,14 +15,37 @@ public static class ProductionGraphExporter
 
         foreach (var node in allNodes)
         {
-            var label = $@"Machine Type\n{node.Recipe.Output.Resource}\n{node.MachineCount.ToString("0.####", CultureInfo.InvariantCulture)} machines";
-            dot.AppendLine($"\"{node.GetHashCode()}\" [label=\"{label}\", shape=box];");
+            dot.AppendLine($"\"{node.GetHashCode()}\" [label=\"{GetNodeLabel(node)}\", shape=box];");
+
+            if (node.Type == MachineType.Refinery)
+            {
+                Console.Out.WriteLine("Refinery");
+            }
 
             foreach (var output in node.Outputs)
             {
-                var edgeLabel = node.Recipe.Output.Amount + "/min";
-                dot.AppendLine($"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label=\"{edgeLabel}\"];");
+                var resource = node.Recipe.Output.Resource;
+                //todo add extension
+                dot.AppendLine($"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label=\"{GetEdgeLabel(node.Recipe.Output.Resource, output.GetTotalInputAmount(resource))}\"];");
             }
+
+            if (IsByProductUsedUp(node))
+                continue;
+
+            var byproduct = node.Recipe.Byproduct;
+
+            if (byproduct is null)
+                continue;
+
+            var byproductAmount = node.GetTotalOutputAmount(byproduct.Resource);
+
+            var byproductLabel =
+                $"Byproduct\n{byproduct.Resource}\n{byproductAmount.ToString("0.####", CultureInfo.InvariantCulture)}/min";
+
+            var byproductNodeId = $"byproduct_{node.GetHashCode()}_{byproduct.Resource}";
+
+            dot.AppendLine($"\"{byproductNodeId}\" [label=\"{byproductLabel}\", shape=ellipse, style=dashed];");
+            dot.AppendLine($"\"{node.GetHashCode()}\" -> \"{byproductNodeId}\" [label=\"{GetEdgeLabel(byproduct.Resource, byproductAmount)}\",style=dotted];");
 
             added.Add(node);
         }
@@ -30,6 +53,7 @@ public static class ProductionGraphExporter
         dot.AppendLine("}");
 
         var outputDir = Path.GetDirectoryName(fileName);
+
         if (!string.IsNullOrEmpty(outputDir) && !Directory.Exists(outputDir))
         {
             Directory.CreateDirectory(outputDir);
@@ -56,5 +80,29 @@ public static class ProductionGraphExporter
         process.WaitForExit();
 
         Console.WriteLine($"Graph exported to {pngFile}");
+    }
+
+    private static bool IsByProductUsedUp(MachineNode machine)
+    {
+        var byProduct = machine.Recipe.Byproduct;
+
+        if (byProduct is null)
+            return true;
+
+        var byproductAmount = machine.GetTotalOutputAmount(byProduct.Resource);
+        Console.Out.WriteLine($"Byproduct {byProduct.Resource} amount: {byproductAmount}");
+
+        return false;
+    }
+
+    private static string GetNodeLabel(MachineNode node)
+    {
+        return
+            $@"{node.Type}\n{node.Recipe.Output.Resource}\n{node.MachineCount.ToString("0.####", CultureInfo.InvariantCulture)} machines";
+    }
+
+    private static string GetEdgeLabel(Resource resource, double amount)
+    {
+        return $"{resource}\n{amount.ToString("0.####", CultureInfo.InvariantCulture)}/min";
     }
 }
