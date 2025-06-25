@@ -9,8 +9,8 @@ public class MachineNode(Recipe recipe)
 
     public double MachineCount { get; private set; }
 
-    private List<MachineNode> Inputs { get; set; } = [];
-    private List<MachineNode> Outputs { get; set; } = [];
+    public List<MachineNode> Inputs { get; set; } = [];
+    public List<MachineNode> Outputs { get; set; } = [];
 
     public void SetOutputRate(double desiredOutputPerMinute)
     {

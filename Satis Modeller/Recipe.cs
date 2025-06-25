@@ -20,4 +20,8 @@ public class Recipe(IEnumerable<ItemNode> inputs, ItemNode output, ItemNode bypr
     public Recipe(ItemNode input, ItemNode output) : this([input], output)
     {
     }
+
+    public Recipe(ItemNode input, ItemNode output, ItemNode byproduct) : this([input], output, byproduct)
+    {
+    }
 }

@@ -1,63 +1,207 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+// using Satis_Modeller;
+//
+// var ironOreRecipe = new Recipe(
+//     new ItemNode { Resource = Resource.IronOre, Amount = 60 });
+//
+// var ironOreMiner = new MachineNode(ironOreRecipe);
+//
+// var ironIngotsRecipe = new Recipe(
+//     new ItemNode { Resource = Resource.IronOre, Amount = 30 },
+//     new ItemNode { Resource = Resource.IronIngot, Amount = 30 });
+//
+// var ironIngots = new MachineNode(ironIngotsRecipe);
+//
+// var platesConstructorRecipe = new Recipe(
+//     new ItemNode { Resource = Resource.IronIngot, Amount = 30 },
+//     new ItemNode { Resource = Resource.IronPlate, Amount = 20 });
+//
+// var platesConstructor = new MachineNode(platesConstructorRecipe);
+//
+// var screwsConstructorRecipe = new Recipe(
+//     new ItemNode { Resource = Resource.IronIngot, Amount = 12.5 },
+//     new ItemNode { Resource = Resource.Screws, Amount = 50 });
+//
+// var screwsConstructor = new MachineNode(screwsConstructorRecipe);
+//
+// var reinforcedIronPlateRecipe = new Recipe(
+//     [
+//         new ItemNode { Resource = Resource.IronPlate, Amount = 30 },
+//         new ItemNode { Resource = Resource.Screws, Amount = 60 },
+//     ],
+//     new ItemNode { Resource = Resource.ReinforcedIronPlate, Amount = 5 });
+//
+// var reinforcedIronPlateAssembler = new MachineNode(reinforcedIronPlateRecipe);
+//
+// ironOreMiner.AddOutput(ironIngots);
+//
+// ironIngots.AddOutput(platesConstructor);
+// ironIngots.AddOutput(screwsConstructor);
+//
+// screwsConstructor.AddOutput(reinforcedIronPlateAssembler);
+// platesConstructor.AddOutput(reinforcedIronPlateAssembler);
+//
+// reinforcedIronPlateAssembler.SetOutputRate(12);
+//
+// Console.WriteLine($"Constructor: {reinforcedIronPlateAssembler.MachineCount} machines");
+// Console.WriteLine($"Smelter: {ironIngots.MachineCount} machines");
+// Console.WriteLine($"Miner: {ironOreMiner.MachineCount} machines");
+//
+// Console.WriteLine(
+//     $"Total ore used: {ironOreMiner.GetTotalOutputAmount(Resource.IronOre)} ore/min in {ironOreMiner.MachineCount} machines");
+//
+// Console.WriteLine(
+//     $"Total plates produced: {platesConstructor.GetTotalOutputAmount(Resource.IronPlate)} plates/min in {platesConstructor.MachineCount} machines");
+//
+// Console.WriteLine(
+//     $"Total screws produced: {screwsConstructor.GetTotalOutputAmount(Resource.Screws)} screws/min in {screwsConstructor.MachineCount} machines");
+//
+// Console.WriteLine(
+//     $"Total reinforced plates produced: {reinforcedIronPlateAssembler.GetTotalOutputAmount(Resource.ReinforcedIronPlate)} plates/min");
+//
+// Console.WriteLine(RecipiePrinter.Print(reinforcedIronPlateAssembler));
+
+
 using Satis_Modeller;
 
-var ironOreRecipe = new Recipe(
-    new ItemNode { Resource = Resource.IronOre, Amount = 60 });
+var copperOreRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CopperOre, Amount = 60 });
 
-var ironOreMiner = new MachineNode(ironOreRecipe);
+var copperOreMiner = new MachineNode(copperOreRecipe);
 
-var ironIngotsRecipe = new Recipe(
-    new ItemNode { Resource = Resource.IronOre, Amount = 30 },
-    new ItemNode { Resource = Resource.IronIngot, Amount = 30 });
+var copperIngotsRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CopperOre, Amount = 30 },
+    new ItemNode { Resource = Resource.CopperIngot, Amount = 30 });
 
-var ironIngots = new MachineNode(ironIngotsRecipe);
+var copperSmelter = new MachineNode(copperIngotsRecipe);
 
-var platesConstructorRecipe = new Recipe(
-    new ItemNode { Resource = Resource.IronIngot, Amount = 30 },
-    new ItemNode { Resource = Resource.IronPlate, Amount = 20 });
+var wireRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CopperIngot, Amount = 15 },
+    new ItemNode { Resource = Resource.Wire, Amount = 30 });
 
-var platesConstructor = new MachineNode(platesConstructorRecipe);
+var wireConstructor = new MachineNode(wireRecipe);
 
-var screwsConstructorRecipe = new Recipe(
-    new ItemNode { Resource = Resource.IronIngot, Amount = 12.5 },
-    new ItemNode { Resource = Resource.Screws, Amount = 50 });
+var cableRecipe = new Recipe(
+    new ItemNode { Resource = Resource.Wire, Amount = 60 },
+    new ItemNode { Resource = Resource.Cable, Amount = 30 });
 
-var screwsConstructor = new MachineNode(screwsConstructorRecipe);
+var cableConstructor = new MachineNode(cableRecipe);
 
-var reinforcedIronPlateRecipe = new Recipe(
+var copperSheetRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CopperIngot, Amount = 20 },
+    new ItemNode { Resource = Resource.CopperSheet, Amount = 10 });
+
+var copperSheetConstructor = new MachineNode(copperSheetRecipe);
+
+// ------
+
+var oilExtractorRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CrudeOil, Amount = 60 });
+
+var oilExtractor = new MachineNode(oilExtractorRecipe);
+
+var plasticRecipe = new Recipe(
+    new ItemNode { Resource = Resource.CrudeOil, Amount = 30 },
+    new ItemNode { Resource = Resource.Plastic, Amount = 20 },
+    new ItemNode { Resource = Resource.HeavyOilResidue, Amount = 10 });
+
+var plasticRefinery = new MachineNode(plasticRecipe);
+
+var heavyoilResidueStorage = StorageBoxFactory.CreateStorage(Resource.HeavyOilResidue);
+
+// 15 sheet, 30 plastic -> 7.5  boards
+var circuitBoardRecipe = new Recipe(
     [
-        new ItemNode { Resource = Resource.IronPlate, Amount = 30 },
-        new ItemNode { Resource = Resource.Screws, Amount = 60 },
+        new ItemNode { Resource = Resource.CopperSheet, Amount = 15 },
+        new ItemNode { Resource = Resource.Plastic, Amount = 30 },
     ],
-    new ItemNode { Resource = Resource.ReinforcedIronPlate, Amount = 5 });
+    new ItemNode { Resource = Resource.CircuitBoard, Amount = 7.5 });
 
-var reinforcedIronPlateAssembler = new MachineNode(reinforcedIronPlateRecipe);
+var circuitBoardAssembler = new MachineNode(circuitBoardRecipe);
 
-ironOreMiner.AddOutput(ironIngots);
+var computerRecipe = new Recipe(
+    [
+        new ItemNode { Resource = Resource.CircuitBoard, Amount = 10 },
+        new ItemNode { Resource = Resource.Cable, Amount = 20 },
+        new ItemNode { Resource = Resource.Plastic, Amount = 40 },
+    ],
+    new ItemNode { Resource = Resource.Computer, Amount = 2.5 }
+);
 
-ironIngots.AddOutput(platesConstructor);
-ironIngots.AddOutput(screwsConstructor);
+var computerManufacturer = new MachineNode(computerRecipe);
 
-screwsConstructor.AddOutput(reinforcedIronPlateAssembler);
-platesConstructor.AddOutput(reinforcedIronPlateAssembler);
+computerManufacturer.AddInput(circuitBoardAssembler);
+computerManufacturer.AddInput(cableConstructor);
+computerManufacturer.AddInput(plasticRefinery);
 
-reinforcedIronPlateAssembler.SetOutputRate(12);
+circuitBoardAssembler.AddInput(copperSheetConstructor);
+circuitBoardAssembler.AddInput(plasticRefinery);
 
-Console.WriteLine($"Constructor: {reinforcedIronPlateAssembler.MachineCount} machines");
-Console.WriteLine($"Smelter: {ironIngots.MachineCount} machines");
-Console.WriteLine($"Miner: {ironOreMiner.MachineCount} machines");
+cableConstructor.AddInput(wireConstructor);
+wireConstructor.AddInput(copperSmelter);
+copperSheetConstructor.AddInput(copperSmelter);
+copperSmelter.AddInput(copperOreMiner);
+
+plasticRefinery.AddInput(oilExtractor);
+heavyoilResidueStorage.AddInput(plasticRefinery);
+
+computerManufacturer.SetOutputRate(4);
+
+Console.WriteLine($"Computer Manufacturer: {computerManufacturer.MachineCount} machines");
+Console.WriteLine($"Plastic Refinery: {plasticRefinery.MachineCount} machines");
+Console.WriteLine($"Copper Smelter: {copperSmelter.MachineCount} machines");
+Console.WriteLine($"Wire Constructor: {wireConstructor.MachineCount} machines");
+Console.WriteLine($"Cable Constructor: {cableConstructor.MachineCount} machines");
+Console.WriteLine($"Copper Sheet Constructor: {copperSheetConstructor.MachineCount} machines");
+Console.WriteLine($"Oil Extractor: {oilExtractor.MachineCount} machines");
 
 Console.WriteLine(
-    $"Total ore used: {ironOreMiner.GetTotalOutputAmount(Resource.IronOre)} ore/min in {ironOreMiner.MachineCount} machines");
+    $"Total copper used: {copperOreMiner.GetTotalOutputAmount(Resource.CopperOre)} copper/min in {copperOreMiner.MachineCount} machines");
 
 Console.WriteLine(
-    $"Total plates produced: {platesConstructor.GetTotalOutputAmount(Resource.IronPlate)} plates/min in {platesConstructor.MachineCount} machines");
+    $"Total copper ingots produced: {copperSmelter.GetTotalOutputAmount(Resource.CopperIngot)} ingots/min in {copperSmelter.MachineCount} machines");
 
 Console.WriteLine(
-    $"Total screws produced: {screwsConstructor.GetTotalOutputAmount(Resource.Screws)} screws/min in {screwsConstructor.MachineCount} machines");
+    $"Total wire produced: {wireConstructor.GetTotalOutputAmount(Resource.Wire)} wire/min in {wireConstructor.MachineCount} machines");
 
 Console.WriteLine(
-    $"Total reinforced plates produced: {reinforcedIronPlateAssembler.GetTotalOutputAmount(Resource.ReinforcedIronPlate)} plates/min");
+    $"Total cables produced: {cableConstructor.GetTotalOutputAmount(Resource.Cable)} cables/min in {cableConstructor.MachineCount} machines");
 
-Console.WriteLine(RecipiePrinter.Print(reinforcedIronPlateAssembler));
+Console.WriteLine(
+    $"Total copper sheets produced: {copperSheetConstructor.GetTotalOutputAmount(Resource.CopperSheet)} sheets/min in {copperSheetConstructor.MachineCount} machines");
+
+Console.WriteLine(
+    $"Total oil extracted: {oilExtractor.GetTotalOutputAmount(Resource.CrudeOil)} crude oil/min in {oilExtractor.MachineCount} machines");
+
+Console.WriteLine(RecipiePrinter.Print(computerManufacturer.Recipe, 1));
+Console.WriteLine(RecipiePrinter.Print(computerManufacturer));
+
+var allNodes = new List<MachineNode>
+{
+    computerManufacturer,
+    circuitBoardAssembler,
+    plasticRefinery,
+    copperSmelter,
+    wireConstructor,
+    cableConstructor,
+    copperSheetConstructor,
+    oilExtractor,
+    copperOreMiner,
+    heavyoilResidueStorage,
+};
+
+ProductionGraphExporter.ExportToPng("production_graph", allNodes);
+
+public static class StorageBoxFactory
+{
+    public static MachineNode CreateStorage(Resource resource)
+    {
+        var input = new ItemNode { Resource = resource, Amount = int.MaxValue };
+        var dummyRecipe = new Recipe(input, ItemNode.GetEmpty());
+        return new MachineNode(dummyRecipe)
+        {
+        };
+    }
+}
+
