@@ -1,0 +1,40 @@
+digraph G {
+rankdir=LR;
+"32854180" [label="Manufacturer\nComputer\n1.6 machines", shape=box];
+"27252167" [label="Assembler\nCircuitBoard\n2.1333 machines", shape=box];
+"27252167" -> "32854180" [label="CircuitBoard
+16/min"];
+"23458411" [label="Refinery\nPlastic\n6.4 machines", shape=box];
+"23458411" -> "32854180" [label="Plastic
+64/min"];
+"23458411" -> "27252167" [label="Plastic
+64/min"];
+"23458411" -> "30015890" [label="Plastic
+30/min"];
+"byproduct_23458411_HeavyOilResidue" [label="Byproduct
+HeavyOilResidue
+64/min", shape=ellipse, style=dashed];
+"23458411" -> "byproduct_23458411_HeavyOilResidue" [label="HeavyOilResidue
+64/min",style=dotted];
+"59941933" [label="Smelter\nCopperIngot\n3.2 machines", shape=box];
+"59941933" -> "55530882" [label="CopperIngot
+32/min"];
+"59941933" -> "43942917" [label="CopperIngot
+64/min"];
+"55530882" [label="Constructor\nWire\n2.1333 machines", shape=box];
+"55530882" -> "21083178" [label="Wire
+64/min"];
+"21083178" [label="Constructor\nCable\n1.0667 machines", shape=box];
+"21083178" -> "32854180" [label="Cable
+32/min"];
+"43942917" [label="Constructor\nCopperSheet\n3.2 machines", shape=box];
+"43942917" -> "27252167" [label="CopperSheet
+32/min"];
+"9799115" [label="Extractor\nCrudeOil\n3.2 machines", shape=box];
+"9799115" -> "23458411" [label="CrudeOil
+192/min"];
+"2606490" [label="Miner\nCopperOre\n1.6 machines", shape=box];
+"2606490" -> "59941933" [label="CopperOre
+96/min"];
+"30015890" [label="Refinery\nFuel\n0.5 machines", shape=box];
+}

@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Satis Modeller", "Satis Modeller\Satis Modeller.csproj", "{05A7C4F5-73AE-4A02-9CB7-E4E6808FBD25}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Artifacts", "Artifacts", "{91CAE5A7-C9F8-49F4-96B6-4210DF66357D}"
+	ProjectSection(SolutionItems) = preProject
+		Satis Modeller\bin\Debug\net9.0\production_graph.dot = Satis Modeller\bin\Debug\net9.0\production_graph.dot
+		Satis Modeller\bin\Debug\net9.0\production_graph.png = Satis Modeller\bin\Debug\net9.0\production_graph.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
