@@ -18,6 +18,7 @@ public enum Resource
     ReinforcedIronPlate,
     CrudeOil,
     HeavyOilResidue,
+    Fuel,
     Plastic,
     Rubber,
     PolymerResin,

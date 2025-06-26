@@ -20,4 +20,12 @@ public class Recipe(IEnumerable<ItemNode> inputs, ItemNode output, ItemNode? byp
     public Recipe(ItemNode input, ItemNode output, ItemNode? byproduct) : this([input], output, byproduct)
     {
     }
+
+    public double GetRateForResource(Resource resource)
+    {
+        if(byproduct is not null && byproduct.Resource == resource)
+            return byproduct.Amount;
+
+        return Output.Amount;
+    }
 }

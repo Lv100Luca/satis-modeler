@@ -36,7 +36,8 @@ public class MachineNode(Recipe recipe, MachineType type)
         foreach (var input in node.Recipe.Inputs)
         {
             var inputPerMachine = input.Amount;
-            var totalInputNeeded = (rate / node.Recipe.Output.Amount) * inputPerMachine;
+            var amount = node.Recipe.GetRateForResource(input.Resource);
+            var totalInputNeeded = (rate / amount) * inputPerMachine;
 
             foreach (var inputNode in node.Inputs.Where(inputNode => inputNode.Recipe.Output.Resource == input.Resource))
             {

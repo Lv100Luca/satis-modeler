@@ -108,6 +108,12 @@ var plasticRecipe = new Recipe(
 
 var plasticRefinery = new MachineNode(plasticRecipe, MachineType.Refinery);
 
+var fuelRecipe = new Recipe(
+    new ItemNode { Resource = Resource.HeavyOilResidue, Amount = 60 },
+    new ItemNode { Resource = Resource.Fuel, Amount = 40 });
+
+var fuelRefinery = new MachineNode(fuelRecipe, MachineType.Refinery);
+
 // var heavyoilResidueStorage = StorageBoxFactory.CreateStorage(Resource.HeavyOilResidue);
 
 // 15 sheet, 30 plastic -> 7.5  boards
@@ -144,10 +150,11 @@ copperSheetConstructor.AddInput(copperSmelter);
 copperSmelter.AddInput(copperOreMiner);
 
 plasticRefinery.AddInput(oilExtractor);
-// heavyoilResidueStorage.AddInput(plasticRefinery);
-// plasticRefinery.AddOutput(heavyoilResidueStorage);
+fuelRefinery.AddInput(plasticRefinery);
+// plasticRefinery.AddOutput(fuelRefinery);
 
 computerManufacturer.SetOutputRate(4);
+fuelRefinery.SetOutputRate(20);
 
 Console.WriteLine($"Computer Manufacturer: {computerManufacturer.MachineCount} machines");
 Console.WriteLine($"Plastic Refinery: {plasticRefinery.MachineCount} machines");
@@ -178,6 +185,8 @@ Console.WriteLine(
 Console.WriteLine(RecipiePrinter.Print(computerManufacturer.Recipe, 1));
 Console.WriteLine(RecipiePrinter.Print(computerManufacturer));
 Console.WriteLine(RecipiePrinter.Print(plasticRefinery));
+Console.WriteLine(RecipiePrinter.Print(fuelRefinery));
+
 
 var allNodes = new List<MachineNode>
 {
@@ -190,6 +199,7 @@ var allNodes = new List<MachineNode>
     copperSheetConstructor,
     oilExtractor,
     copperOreMiner,
+    fuelRefinery
     // heavyoilResidueStorage,
 };
 

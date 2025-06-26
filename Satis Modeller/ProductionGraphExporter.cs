@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -24,9 +25,12 @@ public static class ProductionGraphExporter
 
             foreach (var output in node.Outputs)
             {
-                var resource = node.Recipe.Output.Resource;
+                // find common input and output between two machines
+                var resource = GetCommonResource(node, output);
+
                 //todo add extension
-                dot.AppendLine($"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label=\"{GetEdgeLabel(node.Recipe.Output.Resource, output.GetTotalInputAmount(resource))}\"];");
+                dot.AppendLine(
+                    $"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label=\"{GetEdgeLabel(node.Recipe.Output.Resource, output.GetTotalInputAmount(resource))}\"];");
             }
 
             if (IsByProductUsedUp(node))
@@ -45,7 +49,9 @@ public static class ProductionGraphExporter
             var byproductNodeId = $"byproduct_{node.GetHashCode()}_{byproduct.Resource}";
 
             dot.AppendLine($"\"{byproductNodeId}\" [label=\"{byproductLabel}\", shape=ellipse, style=dashed];");
-            dot.AppendLine($"\"{node.GetHashCode()}\" -> \"{byproductNodeId}\" [label=\"{GetEdgeLabel(byproduct.Resource, byproductAmount)}\",style=dotted];");
+
+            dot.AppendLine(
+                $"\"{node.GetHashCode()}\" -> \"{byproductNodeId}\" [label=\"{GetEdgeLabel(byproduct.Resource, byproductAmount)}\",style=dotted];");
 
             added.Add(node);
         }
@@ -104,5 +110,18 @@ public static class ProductionGraphExporter
     private static string GetEdgeLabel(Resource resource, double amount)
     {
         return $"{resource}\n{amount.ToString("0.####", CultureInfo.InvariantCulture)}/min";
+    }
+
+    private static Resource GetCommonResource(MachineNode outputMachine, MachineNode inputMachine)
+    {
+        var input = inputMachine.Recipe.Inputs.Select(i => i.Resource).ToList();
+
+        if (input.Contains(outputMachine.Recipe.Output.Resource))
+            return outputMachine.Recipe.Output.Resource;
+
+        if (outputMachine.Recipe.Byproduct is not null && input.Contains(outputMachine.Recipe.Byproduct.Resource))
+            return outputMachine.Recipe.Byproduct.Resource;
+
+        throw new Exception("No common resource found");
     }
 }
