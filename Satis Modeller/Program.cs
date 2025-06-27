@@ -142,6 +142,7 @@ computerManufacturer.AddInput(cableConstructor);
 computerManufacturer.AddInput(plasticRefinery);
 
 circuitBoardAssembler.AddInput(copperSheetConstructor);
+// circuitBoardAssembler.OutputLimit = 3;
 circuitBoardAssembler.AddInput(plasticRefinery);
 
 cableConstructor.AddInput(wireConstructor);
@@ -149,12 +150,13 @@ wireConstructor.AddInput(copperSmelter);
 copperSheetConstructor.AddInput(copperSmelter);
 copperSmelter.AddInput(copperOreMiner);
 
+oilExtractor.OutputLimit = 30;
 plasticRefinery.AddInput(oilExtractor);
 fuelRefinery.AddInput(plasticRefinery);
-// plasticRefinery.AddOutput(fuelRefinery);
 
-computerManufacturer.SetOutputRate(4);
-fuelRefinery.SetOutputRate(20);
+computerManufacturer.MaximizeOutput();
+// computerManufacturer.SetOutputRate(4);
+// fuelRefinery.SetOutputRate(20);
 
 Console.WriteLine($"Computer Manufacturer: {computerManufacturer.MachineCount} machines");
 Console.WriteLine($"Plastic Refinery: {plasticRefinery.MachineCount} machines");
@@ -199,21 +201,8 @@ var allNodes = new List<MachineNode>
     copperSheetConstructor,
     oilExtractor,
     copperOreMiner,
-    fuelRefinery
-    // heavyoilResidueStorage,
+    fuelRefinery,
 };
 
 ProductionGraphExporter.ExportToPng("production_graph", allNodes);
-
-public static class StorageBoxFactory
-{
-    public static MachineNode CreateStorage(Resource resource)
-    {
-        var input = new ItemNode { Resource = resource, Amount = 10 };
-        var dummyRecipe = new Recipe(input, ItemNode.GetEmpty());
-        return new MachineNode(dummyRecipe, MachineType.Box)
-        {
-        };
-    }
-}
 

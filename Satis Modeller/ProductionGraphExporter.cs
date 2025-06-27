@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using Satis_Modeller;
+
+namespace Satis_Modeller;
 
 public static class ProductionGraphExporter
 {
@@ -25,12 +25,21 @@ public static class ProductionGraphExporter
 
             foreach (var output in node.Outputs)
             {
-                // find common input and output between two machines
+                // Find the shared resource between this node and its output
                 var resource = GetCommonResource(node, output);
+                var amount = output.GetTotalInputAmount(resource);
 
-                //todo add extension
+                // Generate label text
+                var labelText = GetEdgeLabel(resource, amount);
+
+                // If the node is a bottleneck for this output resource, underline the label
+                var isBottleneck = node.IsBottleneck && node.Recipe.Output.Resource == resource;
+
+                // Use HTML-like label with underline
+                var label = isBottleneck ? $"< <U>{labelText}</U> >" : $"\"{labelText}\"";
+
                 dot.AppendLine(
-                    $"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label=\"{GetEdgeLabel(node.Recipe.Output.Resource, output.GetTotalInputAmount(resource))}\"];");
+                    $"\"{node.GetHashCode()}\" -> \"{output.GetHashCode()}\" [label={label}];");
             }
 
             if (IsByProductUsedUp(node))
@@ -109,7 +118,7 @@ public static class ProductionGraphExporter
 
     private static string GetEdgeLabel(Resource resource, double amount)
     {
-        return $"{resource}\n{amount.ToString("0.####", CultureInfo.InvariantCulture)}/min";
+        return $"{resource}\n {amount.ToString("0.####", CultureInfo.InvariantCulture)}/min";
     }
 
     private static Resource GetCommonResource(MachineNode outputMachine, MachineNode inputMachine)
