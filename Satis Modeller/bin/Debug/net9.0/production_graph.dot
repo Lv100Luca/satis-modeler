@@ -1,40 +1,18 @@
 digraph G {
 rankdir=LR;
-"32854180" [label="Manufacturer\nComputer\n0.5 machines", shape=box];
-"27252167" [label="Assembler\nCircuitBoard\n0.6667 machines", shape=box];
-"27252167" -> "32854180" [label="CircuitBoard
- 5/min"];
-"21083178" [label="Refinery\nPlastic\n1 machines", shape=box];
-"21083178" -> "32854180" [label="Plastic
- 20/min"];
-"21083178" -> "27252167" [label="Plastic
- 20/min"];
-"21083178" -> "30015890" [label="HeavyOilResidue
- 10/min"];
-"byproduct_21083178_HeavyOilResidue" [label="Byproduct
-HeavyOilResidue
-10/min", shape=ellipse, style=dashed];
-"21083178" -> "byproduct_21083178_HeavyOilResidue" [label="HeavyOilResidue
- 10/min",style=dotted];
-"59941933" [label="Smelter\nCopperIngot\n0.3333 machines", shape=box];
-"59941933" -> "23458411" [label="CopperIngot
- 10/min"];
-"59941933" -> "43942917" [label="CopperIngot
- 20/min"];
-"23458411" [label="Constructor\nWire\n0.6667 machines", shape=box];
-"23458411" -> "9799115" [label="Wire
- 20/min"];
-"9799115" [label="Constructor\nCable\n0.3333 machines", shape=box];
-"9799115" -> "32854180" [label="Cable
- 10/min"];
-"43942917" [label="Constructor\nCopperSheet\n1 machines", shape=box];
-"43942917" -> "27252167" [label="CopperSheet
- 10/min"];
-"55530882" [label="Extractor\nCrudeOil\n0.5 machines", shape=box];
-"55530882" -> "21083178" [label=< <U>CrudeOil
- 30/min</U> >];
-"2606490" [label="Miner\nCopperOre\n0.3333 machines", shape=box];
-"2606490" -> "59941933" [label="CopperOre
- 10/min"];
-"30015890" [label="Refinery\nFuel\n0.1667 machines", shape=box];
+"32854180" [label="Assembler\nReinforcedIronPlate\n2.4 machines", shape=box];
+"59941933" [label="Miner\nIronOre\n2.4 machines", shape=box];
+"59941933" -> "43942917" [label="IronOre
+ 144/min"];
+"43942917" [label="Smelter\nIronIngot\n4.8 machines", shape=box];
+"43942917" -> "27252167" [label="IronIngot
+ 108/min"];
+"43942917" -> "2606490" [label="IronIngot
+ 36/min"];
+"27252167" [label="Assembler\nIronPlate\n3.6 machines", shape=box];
+"27252167" -> "32854180" [label="IronPlate
+ 72/min"];
+"2606490" [label="Assembler\nScrews\n2.88 machines", shape=box];
+"2606490" -> "32854180" [label="Screws
+ 144/min"];
 }
