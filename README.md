@@ -8,3 +8,8 @@ Todos:
 - [] Calculate power used
 - [] add power slug support
 - [] add Somersloop support
+
+
+# lol math pls help 
+- use maximum flow graph
+- multiple commoditiy flows problem
